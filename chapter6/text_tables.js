@@ -19,7 +19,7 @@ TextCell.prototype.minHeight = function(){
 };
 
 function convertObjectToCells(rows){
-    var keys = Object.keys(rows[0])
+    var keys = Object.keys(rows[0]);
     var titleRow = keys.map(function(key){
         return new TextCell(key);
     });
@@ -44,23 +44,31 @@ StrechCell.prototype.minHeight = function(){
 };
 
 StrechCell.prototype.draw = function(){
-
+    return this.inner.draw();
 };
 
 function minCol(rows){
-    console.log(rows);
+    //console.log(rows);
     return rows[0].map(function(__, i){
         return rows.reduce(function(max, col){
-            console.log(max+"---"+col[i]+"("+i+")");
+            //console.log(max+"---"+col[i]+"("+i+")");
             return Math.max(max, col[i].minWidth());
         },0);
     });
-};
+}
+
+function minRow(rows){
+    return rows.map(function(row){
+        return row.reduce(function(max,col){return Math.max(max, col.minHeight())},0);
+    });
+}
 
 function drawTable(rows){
     var minColumnWidth = minCol(rows);
     console.log(minColumnWidth);
-};
+    var minRowHeight = minRow(rows);
+    console.log(minRowHeight);
+}
 
 
 
