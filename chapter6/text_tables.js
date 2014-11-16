@@ -2,8 +2,7 @@
  * Created by chrismorgan on 11/15/14.
  */
 var MOUNTAINS = require("./mountains.js");
-//var mts = JSON.parse(MOUNTAINS);
-console.log(MOUNTAINS);
+//console.log(MOUNTAINS);
 
 function TextCell(data){
     this.data = data.split('\n');
@@ -24,7 +23,7 @@ TextCell.prototype.draw = function(width,height){
         var content = this.data[x] || "";
         cellContents.push(rightPad(content,width," "));
     }
-    console.log(cellContents);
+    //console.log(cellContents);
     return cellContents;
 };
 
@@ -93,11 +92,28 @@ function minRow(rows){
 
 function drawTable(rows){
     var minColumnWidth = minCol(rows);
-    console.log(minColumnWidth);
+    //console.log(minColumnWidth);
     var minRowHeight = minRow(rows);
-    console.log(minRowHeight);
+    //console.log(minRowHeight);
 
+    function drawLine(blocks, lineNo){
+        return blocks.map(function(block){
+            return block[lineNo];
+        }).join(" ");
+    }
 
+    function drawRow(row,rowNum){
+        var blocks = row.map(function(cell, colNum){
+            return cell.draw(minColumnWidth[colNum],minRowHeight[rowNum]);
+        });
+        //console.log(blocks);
+        return blocks[0].map(function(__, lineNo){
+            return drawLine(blocks, lineNo);
+        }).join("\n");
+
+    }
+
+    return rows.map(drawRow).join("\n");
 }
 
 
@@ -117,4 +133,4 @@ console.log(testCell2.minHeight());
 console.log(testCell2.draw(testCell2.minWidth(),testCell2.minHeight()));
 
 
-drawTable(convertObjectToCells(MOUNTAINS));
+console.log(drawTable(convertObjectToCells(MOUNTAINS)));
