@@ -28,33 +28,44 @@ TextCell.prototype.draw = function(width,height){
 };
 
 function rightPad(text, width, padString){
-    var padding = "";
-    for(var x = 0; x < width-text.length; x++){
-        padding += padString;
-    }
-    //console.log(text+padding);
-    return text+padding;
+    return text+repeatStr(padString,width-text.length);
 }
 
 function leftPad(text, width, padString){
+    return repeatStr(padString,width-text.length)+text;
+}
+
+function repeatStr(string, size){
     var padding = "";
-    for(var x = 0; x < width-text.length; x++){
-        padding += padString;
+    for(var x = 0; x < size; x++){
+        padding += string;
     }
-    //console.log(text+padding);
-    return padding+text;
+    return padding
 }
 
 function convertObjectToCells(rows){
     var keys = Object.keys(rows[0]);
     var titleRow = keys.map(function(key){
-        return new TextCell(key);
+        return new UnderlineCell(new TextCell(key));
     });
     var body = rows.map(function(row) { return keys.map(function(name) {
         return new TextCell(String(row[name])); });
     });
     return [titleRow].concat(body);
 }
+
+function UnderlineCell(inner){
+    this.inner = inner;
+}
+UnderlineCell.prototype.minWidth = function (){
+    return this.inner.minWidth();
+};
+UnderlineCell.prototype.minHeight = function (){
+    return this.inner.minHeight()+1;
+};
+UnderlineCell.prototype.draw = function (width, heigth){
+    return this.inner.draw(width,heigth-1).concat(repeatStr("_",width));
+};
 
 function StrechCell(inner, width, heigth){
     this.inner = inner;
@@ -132,5 +143,5 @@ console.log(testCell2.minWidth());
 console.log(testCell2.minHeight());
 console.log(testCell2.draw(testCell2.minWidth(),testCell2.minHeight()));
 
-
+console.log("\n\n");
 console.log(drawTable(convertObjectToCells(MOUNTAINS)));
