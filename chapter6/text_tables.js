@@ -17,6 +17,34 @@ TextCell.prototype.minWidth = function(){
 TextCell.prototype.minHeight = function(){
     return this.data.length;
 };
+TextCell.prototype.draw = function(width,height){
+    var cellContents = [];
+
+    for(var x = 0; x < height; x++){
+        var content = this.data[x] || "";
+        cellContents.push(rightPad(content,width," "));
+    }
+    console.log(cellContents);
+    return cellContents;
+};
+
+function rightPad(text, width, padString){
+    var padding = "";
+    for(var x = 0; x < width-text.length; x++){
+        padding += padString;
+    }
+    //console.log(text+padding);
+    return text+padding;
+}
+
+function leftPad(text, width, padString){
+    var padding = "";
+    for(var x = 0; x < width-text.length; x++){
+        padding += padString;
+    }
+    //console.log(text+padding);
+    return padding+text;
+}
 
 function convertObjectToCells(rows){
     var keys = Object.keys(rows[0]);
@@ -68,6 +96,8 @@ function drawTable(rows){
     console.log(minColumnWidth);
     var minRowHeight = minRow(rows);
     console.log(minRowHeight);
+
+
 }
 
 
@@ -79,9 +109,12 @@ function drawTable(rows){
 var testCell = new TextCell('143232');
 console.log(testCell.minWidth());
 console.log(testCell.minHeight());
+console.log(testCell.draw(testCell.minWidth(),testCell.minHeight()));
+
 var testCell2 = new TextCell('143232\ntytrd7gg');
 console.log(testCell2.minWidth());
 console.log(testCell2.minHeight());
+console.log(testCell2.draw(testCell2.minWidth(),testCell2.minHeight()));
 
 
 drawTable(convertObjectToCells(MOUNTAINS));
