@@ -58,22 +58,20 @@ UnderlineCell.prototype.draw = function (width, heigth){
 
 
 
-function StrechCell(inner, width, heigth){
+function StretchCell(inner, width, heigth){
     this.inner = inner;
     this.width = width;
     this.height = heigth;
 }
 
-StrechCell.prototype.minWidth = function(){
-    return this.width;
+StretchCell.prototype.minWidth = function(){
+    return Math.max(this.width, this.inner.minWidth());
 };
-
-StrechCell.prototype.minHeight = function(){
-    return this.height;
+StretchCell.prototype.minHeight = function(){
+    return Math.max(this.height, this.inner.minHeight());
 };
-
-StrechCell.prototype.draw = function(){
-    return this.inner.draw();
+StretchCell.prototype.draw = function(width, heigth){
+    return this.inner.draw(width, heigth);
 };
 
 
@@ -175,3 +173,12 @@ console.log(testCell2.draw(testCell2.minWidth(),testCell2.minHeight()));
 
 console.log("\n\n");
 console.log(drawTable(convertObjectToCells(MOUNTAINS)));
+
+
+var sc = new StretchCell(new TextCell("abc"), 1, 2);
+console.log(sc.minWidth());
+// → 3
+console.log(sc.minHeight());
+// → 2
+console.log(sc.draw(3, 2));
+// → ["abc", "   "]
