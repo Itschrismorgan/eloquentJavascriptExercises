@@ -4,6 +4,7 @@
 var MOUNTAINS = require("./mountains.js");
 //console.log(MOUNTAINS);
 
+/* Cell Definitions */
 function TextCell(data){
     this.data = data.split('\n');
     //console.log(this.data);
@@ -21,12 +22,63 @@ TextCell.prototype.draw = function(width,height){
 
     for(var x = 0; x < height; x++){
         var content = this.data[x] || "";
-        cellContents.push(rightPad(content,width," "));
+            cellContents.push(rightPad(content, width, " "));
     }
     //console.log(cellContents);
     return cellContents;
 };
 
+function RTextCell(text){
+    TextCell.call(this,text);
+}
+RTextCell.prototype = Object.create(TextCell.prototype);
+RTextCell.prototype.draw = function (width, height){
+    var cellContents = [];
+
+    for(var x = 0; x < height; x++){
+        var content = this.data[x] || "";
+        cellContents.push(leftPad(content, width, " "));
+    }
+    return cellContents;
+};
+
+
+function UnderlineCell(inner){
+    this.inner = inner;
+}
+UnderlineCell.prototype.minWidth = function (){
+    return this.inner.minWidth();
+};
+UnderlineCell.prototype.minHeight = function (){
+    return this.inner.minHeight()+1;
+};
+UnderlineCell.prototype.draw = function (width, heigth){
+    return this.inner.draw(width,heigth-1).concat(repeatStr("_",width));
+};
+
+
+
+function StrechCell(inner, width, heigth){
+    this.inner = inner;
+    this.width = width;
+    this.height = heigth;
+}
+
+StrechCell.prototype.minWidth = function(){
+    return this.width;
+};
+
+StrechCell.prototype.minHeight = function(){
+    return this.height;
+};
+
+StrechCell.prototype.draw = function(){
+    return this.inner.draw();
+};
+
+
+
+/* Helpers */
 function rightPad(text, width, padString){
     return text+repeatStr(padString,width-text.length);
 }
@@ -49,41 +101,19 @@ function convertObjectToCells(rows){
         return new UnderlineCell(new TextCell(key));
     });
     var body = rows.map(function(row) { return keys.map(function(name) {
-        return new TextCell(String(row[name])); });
+            //console.log(row[name]);
+            //console.log(typeof row[name]);
+            if(typeof row[name] == 'number'){
+                return new RTextCell(String(row[name]));
+            } else {
+                return new TextCell(String(row[name]));
+            }
+        });
     });
     return [titleRow].concat(body);
 }
 
-function UnderlineCell(inner){
-    this.inner = inner;
-}
-UnderlineCell.prototype.minWidth = function (){
-    return this.inner.minWidth();
-};
-UnderlineCell.prototype.minHeight = function (){
-    return this.inner.minHeight()+1;
-};
-UnderlineCell.prototype.draw = function (width, heigth){
-    return this.inner.draw(width,heigth-1).concat(repeatStr("_",width));
-};
 
-function StrechCell(inner, width, heigth){
-    this.inner = inner;
-    this.width = width;
-    this.height = heigth;
-}
-
-StrechCell.prototype.minWidth = function(){
-    return this.width;
-};
-
-StrechCell.prototype.minHeight = function(){
-    return this.height;
-};
-
-StrechCell.prototype.draw = function(){
-    return this.inner.draw();
-};
 
 function minCol(rows){
     //console.log(rows);
