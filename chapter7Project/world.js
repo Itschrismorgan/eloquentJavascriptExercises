@@ -45,6 +45,19 @@
         return location;
     }
 
+    function mapWithEntities(map, entities) {
+        var completeMap = map;
+
+        entities.map(function(entity){
+            console.log(entity);
+            completeMap[entity.location.y][entity.location.x] = entity.object.avatar;
+        });
+
+        return completeMap;
+    }
+
+
+
 
     var World = function(map){
         this.mapArray = processMap(map);
@@ -53,12 +66,17 @@
     };
 
     World.prototype.view = function(){
-
-        return this.mapArray.map(function(row){
+        return mapWithEntities(this.mapArray,this.entities).map(function(row){
             return row.reduce(function(rowString, location){
                 return rowString+location;
             },"");
         },"").join("\n");
+
+        /*return this.mapArray.map(function(row){
+            return row.reduce(function(rowString, location){
+                return rowString+location;
+            },"");
+        },"").join("\n");*/
     };
 
     World.prototype.turn = function(){

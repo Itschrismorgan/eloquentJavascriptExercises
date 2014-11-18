@@ -32,6 +32,6 @@ var plant1 = new GameEntity("*");
 gameWorld.registerEntity(animal1);
 
 
-//console.log(gameWorld.view());
+console.log(gameWorld.view());
 //gameWorld.turn();
 //console.log(gameWorld.view());
