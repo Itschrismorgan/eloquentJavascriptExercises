@@ -8,7 +8,7 @@ function min(a, b) {
     } else {
         return b;
     }
-};
+}
 
 
 console.log(min(4,5));
