@@ -18,8 +18,8 @@
     }
 
     function entityHere(entities, checkLocation){
-        for(var entity in entities){
-            if(entity.location.x === checkLocation.x && entity.location.y === checkLocation.y){
+        for(var x = 0; x < entities.length; x++){
+            if(entities[x].location.x === checkLocation.x && entities[x].location.y === checkLocation.y){
                 return true;
             }
         }
@@ -49,7 +49,6 @@
         var completeMap = map;
 
         entities.map(function(entity){
-            console.log(entity);
             completeMap[entity.location.y][entity.location.x] = entity.object.avatar;
         });
 
@@ -71,12 +70,6 @@
                 return rowString+location;
             },"");
         },"").join("\n");
-
-        /*return this.mapArray.map(function(row){
-            return row.reduce(function(rowString, location){
-                return rowString+location;
-            },"");
-        },"").join("\n");*/
     };
 
     World.prototype.turn = function(){
@@ -90,7 +83,6 @@
         newEntity.object = entity;
         newEntity.location = pickRandomLocation(this.mapArray, this.entities);
         this.entities.push(newEntity);
-        console.log(this.entities);
     };
 
 

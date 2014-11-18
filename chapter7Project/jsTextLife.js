@@ -26,10 +26,16 @@ var map =  ["############################",
 
 var gameWorld = new World(map);
 
-var animal1 = new GameEntity("O");
-var plant1 = new GameEntity("*");
+//Add animals
+gameWorld.registerEntity(new GameEntity("O"));
+gameWorld.registerEntity(new GameEntity("O"));
+gameWorld.registerEntity(new GameEntity("O"));
 
-gameWorld.registerEntity(animal1);
+//Add plants
+gameWorld.registerEntity(new GameEntity("*"));
+gameWorld.registerEntity(new GameEntity("*"));
+gameWorld.registerEntity(new GameEntity("*"));
+
 
 
 console.log(gameWorld.view());
