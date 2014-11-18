@@ -5,6 +5,15 @@ var ANCESTRY_FILE = require('./ancestry.js');
 
 var af = JSON.parse(ANCESTRY_FILE);
 
+function avgArray(array){
+    var sum = array.reduce(function(element1,element2){ return element1 + element2});
+
+    return sum / array.length;
+}
+
+
+
+
 var byNameDict = {};
 
 af.forEach(function(person){
@@ -14,20 +23,11 @@ af.forEach(function(person){
 var hasMotherAvailable = af.filter(function(person){
     return byNameDict[person.mother] !== undefined;
 });
-
-console.log(hasMotherAvailable);
+//console.log(hasMotherAvailable);
 
 var motherAgesAtBirth = hasMotherAvailable.map(function(person){
     return person.born - byNameDict[person.mother].born;
 });
-
-console.log(motherAgesAtBirth);
-
-function avgArray(array){
-    var sum = array.reduce(function(element1,element2){ return element1 + element2});
-
-    return sum / array.length;
-};
-
+//console.log(motherAgesAtBirth);
 
 console.log(avgArray(motherAgesAtBirth));
