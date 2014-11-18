@@ -9,7 +9,7 @@ function arrayToList(array){
         list = prepend({'value': array[x]},list);
     }
     return list;
-};
+}
 
 function listToArray(list){
     var array = [];
@@ -21,13 +21,13 @@ function listToArray(list){
         var rightArray = listToArray(list.rest);
         return array.concat(rightArray);
     }
-};
+}
 
 function prepend(element, list){
     var newList = element;
     newList.rest = list;
     return newList;
-};
+}
 
 function nth(n, list){
     if(n === 0 && list === null){

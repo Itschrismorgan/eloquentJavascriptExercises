@@ -10,7 +10,7 @@ function reverseArray(array){
     }
 
     return newArray;
-};
+}
 
 function reverseArrayInPlace(array){
     for(var x = 0; x < Math.floor(array.length/2); x++){
@@ -19,7 +19,7 @@ function reverseArrayInPlace(array){
         array[array.length - 1 - x] = old;
     }
     return array;
-};
+}
 
 
 console.log(reverseArray([1,2,3,4,5,6]));
