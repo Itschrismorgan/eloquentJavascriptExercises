@@ -10,7 +10,7 @@ function countBs(searchString){
         }
     }
     return bCount;
-};
+}
 
 
 function countChar(searchString, character){
@@ -21,7 +21,7 @@ function countChar(searchString, character){
         }
     }
     return bCount
-};
+}
 
 
 console.log(countBs('I eat Bones'));
