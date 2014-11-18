@@ -5,6 +5,8 @@ var MOUNTAINS = require("./mountains.js");
 //console.log(MOUNTAINS);
 
 /* Cell Definitions */
+
+/* TextCell is the standard data cell. */
 function TextCell(data){
     this.data = data.split('\n');
     //console.log(this.data);
@@ -28,6 +30,7 @@ TextCell.prototype.draw = function(width,height){
     return cellContents;
 };
 
+/* Same as TextCell except the values in the cell will be right justified. */
 function RTextCell(text){
     TextCell.call(this,text);
 }
@@ -42,7 +45,7 @@ RTextCell.prototype.draw = function (width, height){
     return cellContents;
 };
 
-
+/* UnderlineCell addes a line of dashes below cell content. */
 function UnderlineCell(inner){
     this.inner = inner;
 }
@@ -56,14 +59,14 @@ UnderlineCell.prototype.draw = function (width, heigth){
     return this.inner.draw(width,heigth-1).concat(repeatStr("_",width));
 };
 
-
-
+/* StretchCell allows for setting minWidth/minHeigth that is larger than data
+    requires.
+ */
 function StretchCell(inner, width, heigth){
     this.inner = inner;
     this.width = width;
     this.height = heigth;
 }
-
 StretchCell.prototype.minWidth = function(){
     return Math.max(this.width, this.inner.minWidth());
 };
@@ -80,11 +83,9 @@ StretchCell.prototype.draw = function(width, heigth){
 function rightPad(text, width, padString){
     return text+repeatStr(padString,width-text.length);
 }
-
 function leftPad(text, width, padString){
     return repeatStr(padString,width-text.length)+text;
 }
-
 function repeatStr(string, size){
     var padding = "";
     for(var x = 0; x < size; x++){
@@ -93,6 +94,10 @@ function repeatStr(string, size){
     return padding
 }
 
+
+/* Main Code */
+
+/* Convert Obj with table data into Cell Objects */
 function convertObjectToCells(rows){
     var keys = Object.keys(rows[0]);
     var titleRow = keys.map(function(key){
@@ -112,7 +117,7 @@ function convertObjectToCells(rows){
 }
 
 
-
+/* Find the minimum width for each column of the table */
 function minCol(rows){
     //console.log(rows);
     return rows[0].map(function(__, i){
@@ -123,12 +128,15 @@ function minCol(rows){
     });
 }
 
+/* find the minimum height for each row of the table */
 function minRow(rows){
     return rows.map(function(row){
         return row.reduce(function(max,col){return Math.max(max, col.minHeight())},0);
     });
 }
 
+
+/* Primary function to draw a text table given an object with table data */
 function drawTable(rows){
     var minColumnWidth = minCol(rows);
     //console.log(minColumnWidth);
