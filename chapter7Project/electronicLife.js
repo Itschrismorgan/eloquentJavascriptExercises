@@ -89,6 +89,7 @@ function World(map, legend){
     var grid = new Grid(map[0].length, map.length);
     this.grid = grid;
     this.legend = legend;
+    this.age = 0;
 
     map.forEach(function(line, y){
         for(var x = 0; x < line.length; x++){
@@ -108,6 +109,7 @@ World.prototype.toString = function(){
     return output;
 };
 World.prototype.turn = function(){
+    this.age++;
     var acted = [];
     this.grid.forEach(function(critter, vector){
         if (critter.act && acted.indexOf(critter) === -1){
@@ -115,6 +117,7 @@ World.prototype.turn = function(){
             this.__letAct(critter, vector);
         }
     }, this);
+    return this.age;
 };
 World.prototype.__letAct = function(critter, vector){
     var action = critter.act(new View(this, vector));
@@ -135,7 +138,7 @@ World.prototype.__checkDestination = function(action,vector){
     }
 };
 
-
+/* The View object */
 function View(world, vector){
     this.world = world;
     this.vector = vector;
@@ -197,8 +200,10 @@ var plan = ["############################",
 
 var world = new World(plan, {'#': Wall,"O": BouncingCritter});
 console.log(world.toString());
+var turnCnt = 0;
 
-for(var x = 0; x < 5; x++){
-    world.turn();
+for(var x = 0; x < 10; x++){
+    turnCnt = world.turn();
+    console.log("Turn: "+turnCnt);
     console.log(world.toString());
 }
