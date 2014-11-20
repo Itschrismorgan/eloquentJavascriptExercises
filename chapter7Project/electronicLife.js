@@ -46,25 +46,10 @@ Grid.prototype.forEach = function(f, context){
   }
 };
 
-
+/* Helper functions */
 function randomElement (array){
     return array[Math.floor(Math.random() * array.length)];
 }
-
-function Wall(){};
-
-
-function BouncingCritter(){
-    this.direction = randomElement(Object.keys(directions));
-}
-BouncingCritter.prototype.act = function(view){
-    if (view.look(this.direction) !== " "){
-        this.direction = view.find(" ") || "s";
-    }
-    return {type: "move", direction: this.direction};
-};
-
-
 function elementFromChar(legend, char){
     if (char === " ")
         return null;
@@ -79,6 +64,24 @@ function charFromElement(element){
         return element.originChar;
     }
 }
+
+
+
+/* World entities */
+function Wall(){};
+
+
+function BouncingCritter(){
+    this.direction = randomElement(Object.keys(directions));
+}
+BouncingCritter.prototype.act = function(view){
+    if (view.look(this.direction) !== " "){
+        this.direction = view.find(" ") || "s";
+    }
+    return {type: "move", direction: this.direction};
+};
+
+
 
 
 
@@ -104,7 +107,33 @@ World.prototype.toString = function(){
     }
     return output;
 };
-
+World.prototype.turn = function(){
+    var acted = [];
+    this.grid.forEach(function(critter, vector){
+        if (critter.act && acted.indexOf(critter) === -1){
+            acted.push(critter);
+            this.__letAct(critter, vector);
+        }
+    }, this);
+};
+World.prototype.__letAct = function(critter, vector){
+    var action = critter.act(new View(this, vector));
+    if (action && action.type === "move"){
+        var dest = this.__checkDestination(action, vector);
+        if (dest && this.grid.get(dest) === null){
+            this.grid.set(vector, null);
+            this.grid.set(dest,critter);
+        }
+    }
+};
+World.prototype.__checkDestination = function(action,vector){
+    if (directions.hasOwnProperty(action.direction)){
+        var dest = vector.plus(directions[action.direction]);
+        if (this.grid.isInside(vector)){
+            return dest;
+        }
+    }
+};
 
 var plan2 = ["############################",
             "#####                 ######",
