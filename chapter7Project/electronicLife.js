@@ -187,6 +187,7 @@ View.prototype.find = function(char) {
     return randomElement(found);
 };
 
+/*
 var plan = ["############################",
             "#####                 ######",
             "##                        ##",
@@ -210,21 +211,9 @@ for(var x = 0; x < 10; x++){
     turnCnt = world.turn();
     console.log("Turn: "+turnCnt);
     console.log(world.toString());
-}
+}*/
 
 
-var lifeLikePlan = ["############################",
-                    "#####                 ######",
-                    "##   ***                **##",
-                    "#   *##**         **  O  *##",
-                    "#    ***     O    ##**    *#",
-                    "#       O         ##***    #",
-                    "#                 ##**     #",
-                    "#   O       #*             #",
-                    "#*          #**       O    #",
-                    "#***        ##**    O    **#",
-                    "##****     ###***       *###",
-                    "############################"];
 
 /* Object with all valid action functions */
 var actionTypes = Object.create(null);
@@ -316,3 +305,26 @@ LifeLikeWorld.prototype.__letAct = function(critter, vector){
     }
 };
 
+
+var lifeLikePlan = ["############################",
+                    "#####                 ######",
+                    "##   ***                **##",
+                    "#   *##**         **  O  *##",
+                    "#    ***     O    ##**    *#",
+                    "#       O         ##***    #",
+                    "#                 ##**     #",
+                    "#   O       #*             #",
+                    "#*          #**       O    #",
+                    "#***        ##**    O    **#",
+                    "##****     ###***       *###",
+                    "############################"];
+
+var world = new World(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Plant});
+console.log(world.toString());
+var turnCnt = 0;
+
+for(var x = 0; x < 10; x++){
+    turnCnt = world.turn();
+    console.log("Turn: "+turnCnt);
+    console.log(world.toString());
+}
