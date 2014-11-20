@@ -26,6 +26,9 @@ var map =  ["############################",
 
 var gameWorld = new World(map);
 
+var testObj = new GameEntity("&");
+testObj.act([]);
+
 //Add animals
 gameWorld.registerEntity(new GameEntity("O"));
 gameWorld.registerEntity(new GameEntity("O"));
@@ -38,6 +41,6 @@ gameWorld.registerEntity(new GameEntity("*"));
 
 
 
-console.log(gameWorld.view());
-//gameWorld.turn();
+console.log(gameWorld.toString());
+gameWorld.turn();
 //console.log(gameWorld.view());

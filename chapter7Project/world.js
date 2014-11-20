@@ -56,6 +56,19 @@
     }
 
 
+    function getSurroundings(location,map){
+        var surroundings = {
+            'n': map[location.y-1][location.x],
+            'ne': map[location.y-1][location.x+1],
+            'e': map[location.y][location.x+1],
+            'se': map[location.y+1][location.x+1],
+            's': map[location.y+1][location.x],
+            'sw': map[location.y+1][location.x-1],
+            'w': map[location.y][location.x-1],
+            'nw': map[location.y-1][location.x-1]
+        };
+        return surroundings;
+    }
 
 
     var World = function(map){
@@ -64,7 +77,7 @@
         this.entities = [];
     };
 
-    World.prototype.view = function(){
+    World.prototype.toString = function(){
         return mapWithEntities(this.mapArray,this.entities).map(function(row){
             return row.reduce(function(rowString, location){
                 return rowString+location;
@@ -74,9 +87,18 @@
 
     World.prototype.turn = function(){
         this.age++;
-      // cycle through all entities in world to enact actions.
+        // cycle through all entities in world to enact actions.
+        //console.log(this.entities);
+
+        for(var x = 0; x < this.entities.length; x++){
+            console.log(this.entities[x]);
+            var newLocation = this.entities[x].act(getSurroundings(this.entities[x].location, mapWithEntities(this.mapArray, this.entities)));
+            this.entities[x].location = newLocation;
+        }
         return this.age;
     };
+
+
 
     World.prototype.registerEntity = function(entity){
         var newEntity = {};
