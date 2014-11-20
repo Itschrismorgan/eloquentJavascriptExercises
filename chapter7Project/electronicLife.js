@@ -84,7 +84,7 @@ BouncingCritter.prototype.act = function(view){
 
 
 
-
+/* Game Word Object */
 function World(map, legend){
     var grid = new Grid(map[0].length, map.length);
     this.grid = grid;
@@ -135,7 +135,39 @@ World.prototype.__checkDestination = function(action,vector){
     }
 };
 
-var plan2 = ["############################",
+
+function View(world, vector){
+    this.world = world;
+    this.vector = vector;
+}
+View.prototype.look = function(dir){
+    var target = this.vector.plus(directions[dir]);
+    if (this.world.grid.isInside(target)) {
+        return charFromElement(this.world.grid.get(target));
+    } else {
+        return "#";
+    }
+};
+View.prototype.findAll = function(char) {
+    var found = [];
+    for(var dir in directions){
+        if(this.look(dir) === char){
+            found.push(dir);
+        }
+    }
+    return found;
+};
+View.prototype.find = function(char) {
+    var found = this.findAll(char);
+    if(found.length === 0) {
+        return null;
+    }
+    return randomElement(found);
+};
+
+
+
+var plan2 =["############################",
             "#####                 ######",
             "##   ***                **##",
             "#   *##**         **  O  *##",
@@ -165,3 +197,8 @@ var plan = ["############################",
 
 var world = new World(plan, {'#': Wall,"O": BouncingCritter});
 console.log(world.toString());
+
+for(var x = 0; x < 5; x++){
+    world.turn();
+    console.log(world.toString());
+}
