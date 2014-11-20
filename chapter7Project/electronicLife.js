@@ -187,21 +187,6 @@ View.prototype.find = function(char) {
     return randomElement(found);
 };
 
-
-
-var plan2 =["############################",
-            "#####                 ######",
-            "##   ***                **##",
-            "#   *##**         **  O  *##",
-            "#    ***     O    ##**    *#",
-            "#       O         ##***    #",
-            "#                 ##**     #",
-            "#   O       #*             #",
-            "#*          #**       O    #",
-            "#***        ##**    O    **#",
-            "##****     ###***       *###",
-            "############################"];
-
 var plan = ["############################",
             "#####                 ######",
             "##                        ##",
@@ -226,3 +211,75 @@ for(var x = 0; x < 10; x++){
     console.log("Turn: "+turnCnt);
     console.log(world.toString());
 }
+
+
+var lifeLikePlan = ["############################",
+                    "#####                 ######",
+                    "##   ***                **##",
+                    "#   *##**         **  O  *##",
+                    "#    ***     O    ##**    *#",
+                    "#       O         ##***    #",
+                    "#                 ##**     #",
+                    "#   O       #*             #",
+                    "#*          #**       O    #",
+                    "#***        ##**    O    **#",
+                    "##****     ###***       *###",
+                    "############################"];
+
+/* Object with all valid action functions */
+var actionTypes = Object.create(null);
+actionTypes.grow = function(critter){
+    critter.energy += 0.5;
+    return true;
+};
+actionTypes.move = function(critter, vector, action){
+    var dest = this.__checkDestination(action, vector);
+    if (dest === null || critter.energy <= 1 || this.grid.get(dest) !== null){
+        return false;
+    }
+    critter.energy -= 1;
+    this.grid.set(vector, null);
+    this.grid.set(dest, critter);
+    return true;
+};
+actionTypes.eat = function(critter,vector, action){
+    var dest = this.__checkDestination(action, vector);
+    var atDest = dest !== null && this.grid.get(dest);
+    if (!atDest || atDest.energy !== null){
+        return false;
+    }
+    critter.energy += atDest.energy;
+    this.grid.set(dest, null);
+    return true;
+};
+actionTypes.reproduce = function(critter, vector, action){
+    var baby = elementFromChar(this.legend, critter.originChar);
+
+    var dest = this.__checkDestination(action, vector);
+    if (dest === null || critter <= 2 * baby.energy || this.grid.get(vector) !== null){
+        return false;
+    }
+    critter.energy -= 2 * baby.energy;
+    this.grid.set(dest, baby);
+    return true;
+};
+
+
+/* More complex world inherited from World */
+function LifeLikeWorld(map, legend){
+    World.call(this, map, legend);
+}
+LifeLikeWorld.prototype = Object.create(World.prototype);
+LifeLikeWorld.prototype.__letAct = function(critter, vector){
+    var action = critter.act(new View(this, vector));
+
+    var handled = action && action.type in actionTypes && actionTypes[action.type].call(this, critter, vector, action);
+
+    if (!handled){
+        critter.energy -= 0.2;
+        if (critter.energy <= 0){
+            this.grid.set(vector, null);
+        }
+    }
+};
+
