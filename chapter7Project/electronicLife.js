@@ -20,6 +20,8 @@ var directions = {
     'w':  new Vector(-1, 0),
     'nw': new Vector(-1,-1)
 };
+var directionNames = Object.keys(directions);
+
 
 function Grid(width, height){
     this.space = new Array(width,height);
@@ -64,12 +66,15 @@ function charFromElement(element){
         return element.originChar;
     }
 }
+function dirPlus(dir, n) {
+    var index = directionNames.indexOf(dir);
+    return directionNames[(index + n + 8) % 8];
+}
 
 
 
 /* World entities */
-function Wall(){};
-
+function Wall(){}
 
 function BouncingCritter(){
     this.direction = randomElement(Object.keys(directions));
@@ -80,8 +85,22 @@ BouncingCritter.prototype.act = function(view){
     }
     return {type: "move", direction: this.direction};
 };
-
-
+function WallFlower(){
+    this.dir = "s";
+}
+WallFlower.prototype.act = function(view){
+    var start = this.dir;
+    if(view.look(dirPlus(this.dir, -3)) !== " "){
+        start = this.dir = dirPlus(this.dir, -2);
+    }
+    while (view.look(this.dir) !== " "){
+        this.dir = dirPlus(this.dir, 1);
+        if (this.dir === start){
+            break;
+        }
+    }
+    return {type: "move", direction: this.dir};
+};
 
 
 /* Game Word Object */
