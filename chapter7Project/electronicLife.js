@@ -156,6 +156,17 @@ World.prototype.__checkDestination = function(action,vector){
         }
     }
 };
+World.prototype.status = function(){
+    var critters = [];
+    var status = [];
+    this.grid.forEach(function(critter, vector){
+        if (critter.act && critters.indexOf(critter) === -1){
+            critters.push(critter);
+            status.push(critter.originChar+": "+critter.energy+" energy");
+        }
+    }, this);
+    return "Count: "+status.length + "\n"+ status.join("\n");
+};
 
 /* The View object */
 function View(world, vector){
@@ -234,7 +245,7 @@ actionTypes.move = function(critter, vector, action){
 actionTypes.eat = function(critter,vector, action){
     var dest = this.__checkDestination(action, vector);
     var atDest = dest !== null && this.grid.get(dest);
-    if (!atDest || atDest.energy !== null){
+    if (!atDest || atDest.energy == null){
         return false;
     }
     critter.energy += atDest.energy;
@@ -294,7 +305,7 @@ function LifeLikeWorld(map, legend){
 LifeLikeWorld.prototype = Object.create(World.prototype);
 LifeLikeWorld.prototype.__letAct = function(critter, vector){
     var action = critter.act(new View(this, vector));
-
+    //console.log(action);
     var handled = action && action.type in actionTypes && actionTypes[action.type].call(this, critter, vector, action);
 
     if (!handled){
@@ -319,12 +330,13 @@ var lifeLikePlan = ["############################",
                     "##****     ###***       *###",
                     "############################"];
 
-var world = new World(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Plant});
-console.log(world.toString());
+var world2 = new LifeLikeWorld(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Plant});
+console.log(world2.toString());
 var turnCnt = 0;
 
-for(var x = 0; x < 10; x++){
-    turnCnt = world.turn();
+for(var x = 0; x < 25; x++){
+    turnCnt = world2.turn();
     console.log("Turn: "+turnCnt);
-    console.log(world.toString());
+    console.log(world2.toString());
+    console.log(world2.status());
 }
