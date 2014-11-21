@@ -254,9 +254,9 @@ actionTypes.eat = function(critter,vector, action){
 };
 actionTypes.reproduce = function(critter, vector, action){
     var baby = elementFromChar(this.legend, critter.originChar);
-
     var dest = this.__checkDestination(action, vector);
-    if (dest === null || critter <= 2 * baby.energy || this.grid.get(vector) !== null){
+
+    if (dest === null || critter.energy <= 2 * baby.energy || this.grid.get(dest) !== null){
         return false;
     }
     critter.energy -= 2 * baby.energy;
@@ -268,9 +268,7 @@ function Plant(){
     this.energy = 3 + Math.random() * 4;
 }
 Plant.prototype.act = function(context){
-//console.log(context);
-//    console.log(this.energy);
-    if(this.energy > 15){
+   if(this.energy > 15){
         var space = context.find(" ");
         if (space){
            return {type: "reproduce", direction: space};
@@ -307,7 +305,7 @@ function LifeLikeWorld(map, legend){
 LifeLikeWorld.prototype = Object.create(World.prototype);
 LifeLikeWorld.prototype.__letAct = function(critter, vector){
     var action = critter.act(new View(this, vector));
-    if (action) {console.log(action);}
+    //if (action) {console.log(action);}
     var handled = action && action.type in actionTypes && actionTypes[action.type].call(this, critter, vector, action);
 
     if (!handled){
@@ -336,7 +334,7 @@ var world2 = new LifeLikeWorld(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Pl
 console.log(world2.toString());
 var turnCnt = 0;
 
-for(var x = 0; x < 25; x++){
+for(var x = 0; x < 55; x++){
     turnCnt = world2.turn();
     console.log("Turn: "+turnCnt);
     console.log(world2.toString());
