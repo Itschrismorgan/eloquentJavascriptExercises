@@ -229,7 +229,7 @@ for(var x = 0; x < 10; x++){
 /* Object with all valid action functions */
 var actionTypes = Object.create(null);
 actionTypes.grow = function(critter){
-    critter.energy += 0.5;
+    critter.energy += 1;
     return true;
 };
 actionTypes.move = function(critter, vector, action){
@@ -285,6 +285,7 @@ PlantEater.prototype.act = function(context){
     var space = context.find(" ");
 
     if(this.energy > 40 && space){
+        console.log("Baby plant eater....");
         return {type: "reproduce", direction: space};
     }
     var plant = context.find ("*");
@@ -295,7 +296,24 @@ PlantEater.prototype.act = function(context){
     }
 
 };
+function Predator(){
+    this.energy = 20;
+}
+Predator.prototype.act = function(context){
+    var space = context.find(" ");
 
+    if(this.energy > 40 && space){
+        return {type: "reproduce", direction: space};
+    }
+    var plant = context.find ("O");
+    if (plant) {
+        console.log("Yummy.....");
+        return {type: "eat", direction: plant};
+    } else {
+        return {type: "move", direction: space};
+    }
+
+};
 
 
 /* More complex world inherited from World */
@@ -311,6 +329,7 @@ LifeLikeWorld.prototype.__letAct = function(critter, vector){
     if (!handled){
         critter.energy -= 0.2;
         if (critter.energy <= 0){
+            console.log("Death.....");
             this.grid.set(vector, null);
         }
     }
@@ -318,7 +337,7 @@ LifeLikeWorld.prototype.__letAct = function(critter, vector){
 
 
 var lifeLikePlan = ["############################",
-                    "#####                 ######",
+                    "#####            &    ######",
                     "##   ***                **##",
                     "#   *##**         **  O  *##",
                     "#    ***     O    ##**    *#",
@@ -326,15 +345,15 @@ var lifeLikePlan = ["############################",
                     "#                 ##**     #",
                     "#   O       #*             #",
                     "#*          #**       O    #",
-                    "#***        ##**    O    **#",
+                    "#***     &  ##**    O    **#",
                     "##****     ###***       *###",
                     "############################"];
 
-var world2 = new LifeLikeWorld(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Plant});
+var world2 = new LifeLikeWorld(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Plant, "&": Predator});
 console.log(world2.toString());
 var turnCnt = 0;
 
-for(var x = 0; x < 200; x++){
+for(var x = 0; x < 50; x++){
     turnCnt = world2.turn();
     console.log("Turn: "+turnCnt);
     console.log(world2.toString());
