@@ -268,13 +268,13 @@ function Plant(){
     this.energy = 3 + Math.random() * 4;
 }
 Plant.prototype.act = function(context){
-   if(this.energy > 15){
+   if(this.energy > 20){
         var space = context.find(" ");
         if (space){
            return {type: "reproduce", direction: space};
         }
     }
-    if (this.energy < 20){
+    if (this.energy < 30){
         return {type: "grow"};
     }
 };
@@ -284,7 +284,7 @@ function PlantEater(){
 PlantEater.prototype.act = function(context){
     var space = context.find(" ");
 
-    if(this.energy > 60 && space){
+    if(this.energy > 40 && space){
         return {type: "reproduce", direction: space};
     }
     var plant = context.find ("*");
@@ -334,7 +334,7 @@ var world2 = new LifeLikeWorld(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Pl
 console.log(world2.toString());
 var turnCnt = 0;
 
-for(var x = 0; x < 55; x++){
+for(var x = 0; x < 200; x++){
     turnCnt = world2.turn();
     console.log("Turn: "+turnCnt);
     console.log(world2.toString());
