@@ -254,6 +254,11 @@ actionTypes.eat = function(critter,vector, action){
 };
 actionTypes.reproduce = function(critter, vector, action){
     var baby = elementFromChar(this.legend, critter.originChar);
+    if (critter.originChar === "O"){
+        //console.log(baby);
+        //console.log(vector);
+        //console.log(action);
+    }
     var dest = this.__checkDestination(action, vector);
 
     if (dest === null || critter.energy <= 2 * baby.energy || this.grid.get(dest) !== null){
@@ -263,6 +268,11 @@ actionTypes.reproduce = function(critter, vector, action){
     this.grid.set(dest, baby);
     return true;
 };
+actionTypes.stand = function(critter, vector, action){
+    //standing still recovers some of the energy lost
+    critter.energy += 0.5;
+    return true;
+}
 
 function Plant(){
     this.energy = 3 + Math.random() * 4;
@@ -271,7 +281,8 @@ Plant.prototype.act = function(context){
    if(this.energy > 20){
         var space = context.find(" ");
         if (space){
-           return {type: "reproduce", direction: space};
+            //console.log("More cowbell....");
+            return {type: "reproduce", direction: space};
         }
     }
     if (this.energy < 30){
@@ -286,13 +297,20 @@ PlantEater.prototype.act = function(context){
 
     if(this.energy > 40 && space){
         console.log("Baby plant eater....");
+        //console.log(space);
         return {type: "reproduce", direction: space};
     }
     var plant = context.find ("*");
     if (plant) {
+        //console.log("pe e");
         return {type: "eat", direction: plant};
-    } else {
+    } else if (space) {
+        //console.log("pe move");
+        //console.log(space);
         return {type: "move", direction: space};
+    } else {
+        //console.log("sitting tight...");
+        return {type: "stand"};
     }
 
 };
@@ -303,14 +321,19 @@ Predator.prototype.act = function(context){
     var space = context.find(" ");
 
     if(this.energy > 40 && space){
+        console.log("Baby Tyrano....");
         return {type: "reproduce", direction: space};
     }
     var plant = context.find ("O");
     if (plant) {
         console.log("Yummy.....");
         return {type: "eat", direction: plant};
-    } else {
+    } else if (space) {
+        //console.log("pred move");
         return {type: "move", direction: space};
+    } else {
+        //console.log("sitting tight....");
+        return {type: "stand"};
     }
 
 };
@@ -329,7 +352,7 @@ LifeLikeWorld.prototype.__letAct = function(critter, vector){
     if (!handled){
         critter.energy -= 0.2;
         if (critter.energy <= 0){
-            console.log("Death.....");
+            console.log(critter.originChar+ " died.....");
             this.grid.set(vector, null);
         }
     }
@@ -346,14 +369,14 @@ var lifeLikePlan = ["############################",
                     "#   O       #*             #",
                     "#*          #**       O    #",
                     "#***     &  ##**    O    **#",
-                    "##****     ###***       *###",
+                    "##****     ###*** &     *###",
                     "############################"];
 
 var world2 = new LifeLikeWorld(lifeLikePlan, {'#': Wall,"O": PlantEater, "*": Plant, "&": Predator});
 console.log(world2.toString());
 var turnCnt = 0;
 
-for(var x = 0; x < 50; x++){
+for(var x = 0; x < 100; x++){
     turnCnt = world2.turn();
     console.log("Turn: "+turnCnt);
     console.log(world2.toString());
