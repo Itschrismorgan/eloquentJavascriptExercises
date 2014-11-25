@@ -4,6 +4,15 @@
 
 var actionTypes = function(){
 
+    function elementFromChar(legend, char){
+        if (char === " ")
+            return null;
+        var element = new legend[char]();
+        element.originChar = char;
+        return element;
+    }
+
+
     /* Object with all valid action functions */
     var actionTypes = Object.create(null);
     actionTypes.grow = function(critter){
@@ -258,20 +267,33 @@ var theWorld = function(){
         }
     };
 
+    /* More complex world inherited from World */
+    function LifeLikeWorld(map, legend){
+        World.call(this, map, legend);
+    }
+    LifeLikeWorld.prototype = Object.create(World.prototype);
+    LifeLikeWorld.prototype.__letAct = function(critter, vector){
+        var action = critter.act(new View(this, vector));
+        //if (action) {console.log(action);}
+        var handled = action && action.type in actionTypes && actionTypes[action.type].call(this, critter, vector, action);
+
+        if (!handled){
+            critter.energy -= 0.2;
+            if (critter.energy <= 0){
+                console.log(critter.originChar+ " died.....");
+                this.grid.set(vector, null);
+            }
+        }
+    };
+
     return {
-        World: World
+        World: World,
+        LifeLikeWorld: LifeLikeWorld
     };
 }();
 
 
 var View = function(){
-    function elementFromChar(legend, char){
-        if (char === " ")
-            return null;
-        var element = new legend[char]();
-        element.originChar = char;
-        return element;
-    }
     function charFromElement(element){
         if (element === null){
             return " ";
@@ -345,7 +367,7 @@ var lifeLikePlan = ["############################",
                     "############################"];
 
 
-var gameWorld = new theWorld.World(lifeLikePlan,{'#': npcs.Wall,"O": npcs.PlantEater, "*": npcs.Plant, "&": npcs.Predator});
+var gameWorld = new theWorld.LifeLikeWorld(lifeLikePlan,{'#': npcs.Wall,"O": npcs.PlantEater, "*": npcs.Plant, "&": npcs.Predator});
 
 console.log(gameWorld.toString());
 
@@ -353,7 +375,7 @@ gameWorld.turn();
 var turnCnt = 0;
 
 
-for(var x = 0; x < 10; x++){
+for(var x = 0; x < 100; x++){
     turnCnt = gameWorld.turn();
     console.log("Turn: "+turnCnt);
     console.log(gameWorld.toString());
