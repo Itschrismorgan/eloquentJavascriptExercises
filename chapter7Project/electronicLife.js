@@ -272,7 +272,7 @@ actionTypes.stand = function(critter, vector, action){
     //standing still recovers some of the energy lost
     critter.energy += 0.5;
     return true;
-}
+};
 
 function Plant(){
     this.energy = 3 + Math.random() * 4;
