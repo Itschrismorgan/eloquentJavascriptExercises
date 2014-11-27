@@ -148,7 +148,12 @@ specialForms["fun"] = function(args, env) {
     return function() {
         if (arguments.length != argNames.length)
             throw new TypeError("Wrong number of arguments");
+
+        /* This line here allows for closures.  It creates a new local scope 'Enviroment' by using the
+            enviroment as the prototype. New values are added to the local enviroment.*/
         var localEnv = Object.create(env);
+
+
         for (var i = 0; i < arguments.length; i++)
             localEnv[argNames[i]] = arguments[i];
         return evaluate(body, localEnv);
@@ -217,3 +222,11 @@ run("do(define(sum, fun(array,",
     "        sum))),",
     "   print(sum(array(1, 2, 3))))");
 // → 6
+
+console.log(parse("# hello\nx"));
+// → {type: "word", name: "x"}
+
+console.log(parse("a # one\n   # two\n()"));
+// → {type: "apply",
+//    operator: {type: "word", name: "a"},
+//    args: []}
