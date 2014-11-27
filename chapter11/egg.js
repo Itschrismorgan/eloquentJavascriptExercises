@@ -155,6 +155,23 @@ specialForms["fun"] = function(args, env) {
     };
 };
 
+// Array function exercise
+topEnv["array"] = function(){
+    var array = [];
+    for(var x = 0; x < arguments.length; x++){
+        array.push(arguments[x]);
+    }
+    return array;
+};
+
+topEnv["length"] = function(array){
+    return array.length;
+};
+
+
+topEnv["element"] = function(array,index){
+    return array[index];
+};
 
 
 
@@ -179,3 +196,24 @@ run("do(define(total, 0),",
     "            define(count, +(count, 1)))),",
     "   print(total))");
 // → 55
+
+run("do(define(plusOne, fun(a, +(a, 1))),",
+    "   print(plusOne(10)))");
+// → 11
+
+run("do(define(pow, fun(base, exp,",
+    "     if(==(exp, 0),",
+    "        1,",
+    "        *(base, pow(base, -(exp, 1)))))),",
+    "   print(pow(2, 10)))");
+// → 1024
+
+run("do(define(sum, fun(array,",
+    "     do(define(i, 0),",
+    "        define(sum, 0),",
+    "        while(<(i, length(array)),",
+    "          do(define(sum, +(sum, element(array, i))),",
+    "             define(i, +(i, 1)))),",
+    "        sum))),",
+    "   print(sum(array(1, 2, 3))))");
+// → 6
