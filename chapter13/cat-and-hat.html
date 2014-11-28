@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <title>Exercise 13.3 - Cat and the Hat</title>
+</head>
+<body>
+<p stype="text-align:center">
+    <img src="img/cat.png" id="cat" style="position: absolute">
+    <img src="img/hat.png" id="hat" style="position: absolute">
+</p>
+
+<script>
+    var cat = document.querySelector("#cat");
+    var hat = document.querySelector("#hat");
+    // Your code here.
+
+    var angle = 0, lastTime = null;
+    function animate(time) {
+        if (lastTime != null)
+            angle += (time - lastTime) * 0.001;
+        lastTime = time;
+        cat.style.top = (Math.sin(angle) * 20) + 50 + "px";
+        cat.style.left = (Math.cos(angle) * 200) + 360 + "px";
+
+        hat.style.top = (Math.sin(angle) * -20) + 50 + "px";
+        hat.style.left = (Math.cos(angle) * -200) + 360 + "px";
+
+        requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+</script>
+</body>
+</html>
