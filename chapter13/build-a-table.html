@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="code/mountains.js"></script>
+
+        <style>
+            /* Defines a cleaner look for tables */
+            table  { border-collapse: collapse; }
+            td, th { border: 1px solid black; padding: 3px 8px; }
+            th     { text-align: left; }
+        </style>
+
+
+    </head>
+    <body>
+        <p>Exercise 13.1 - Build A Table</p>
+
+        <script>
+            function buildTable(data) {
+                //console.log("check");
+                //console.log(data);
+                // Your code here.
+                var tableNode = document.createElement("table");
+                var colTitles = Object.keys(MOUNTAINS[0]);
+                var headers = document.createElement("tr");
+                for(var x = 0; x < colTitles.length;x++){
+                    var header = document.createElement("th");
+                    header.textContent = colTitles[x];
+                    headers.appendChild(header);
+                }
+                tableNode.appendChild(headers);
+                for(var y = 0; y < MOUNTAINS.length; y++){
+                    var tableRow = document.createElement("tr");
+                    for(var col in MOUNTAINS[y]){
+                        var tableData = document.createElement("td");
+                        tableData.textContent = MOUNTAINS[y][col];
+                        tableRow.appendChild(tableData);
+                    }
+                    tableNode.appendChild(tableRow);
+                }
+
+                return tableNode;
+            }
+
+            document.body.appendChild(buildTable(MOUNTAINS));
+        </script>
+    </body>
+</html>
