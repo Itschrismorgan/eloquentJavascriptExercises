@@ -34,6 +34,9 @@
                     for(var col in MOUNTAINS[y]){
                         var tableData = document.createElement("td");
                         tableData.textContent = MOUNTAINS[y][col];
+                        if(!isNaN(MOUNTAINS[y][col])){
+                            tableData.style.textAlign = "right";
+                        }
                         tableRow.appendChild(tableData);
                     }
                     tableNode.appendChild(tableRow);
