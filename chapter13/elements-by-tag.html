@@ -15,23 +15,16 @@
 
     <script>
         function byTagName(node, tagName) {
-            var nodes = []
-            //console.log(node.tagName+" === "+tagName.toUpperCase());
+            var nodes = [];
             if (node.tagName === tagName.toUpperCase()){
                 nodes.push(node);
             }
-            //console.log(nodes);
-            //console.log(node.childNodes.length);
             if(node.childNodes.length > 0){
                 for(var x = 0; x < node.childNodes.length; x ++){
-                    //console.log("child["+x+"]="+node.childNodes[x].tagName);
                     var childNodes = byTagName(node.childNodes[x],tagName);
-                    //console.log(childNodes);
                     nodes = nodes.concat(childNodes);
-                    //console.log(nodes);
                 }
             }
-            //console.log(nodes);
             return nodes;
         }
 
