@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Exercise 14.3 - Tabbed Interface</title>
+</head>
+<body>
+    <div id="wrapper">
+        <div data-tabname="one"><h2>Tab one</h2><p>asdlkfjsd sjkdfls wdjdj s ds jdjsldkjf sdjfdf.  This is tab 1 text.</p></div>
+        <div data-tabname="two"><h2>Tab two</h2><p>asdlkfjsd sjkdfls wdjdj s ds jdjsldkjf sdjfdf.  This is tab 2 text.</p></div>
+        <div data-tabname="three"><h2>Tab three</h2><p>asdlkfjsd sjkdfls wdjdj s ds jdjsldkjf sdjfdf.  This is tab 3 text.</p></div>
+    </div>
+    <script>
+        function createTabButton (buttonText){
+            var btn = document.createElement('button');
+            btn.id = 'tabBtn-'+buttonText;
+            btn.innerHTML = buttonText;
+            return btn;
+        }
+        function clearAllTabs(){
+            var tabs = document.querySelectorAll("div[data-tabname]");
+            for(var x=0;x<tabs.length;x++){
+                tabs[x].style.display = "none";
+            }
+        }
+        function setBeginStage(){
+            clearAllTabs();
+            var tabDivs = document.querySelectorAll('div[data-tabname]');
+            tabDivs[0].style.display = "block";
+        }
+        function createTabButtonEventListeners(btnId){
+            var tabBtn = document.querySelector("#"+btnId);
+            tabBtn.addEventListener("click",function(event){
+                clearAllTabs();
+                document.querySelector("div[data-tabname="+event.target.innerHTML+"]").style.display = "block";
+            });
+        }
+        function asTabs(node) {
+            var tabDivs = document.querySelectorAll('div[data-tabname]');
+            var firstChild = tabDivs[0];
+            for(var x = 0; x < tabDivs.length; x++){
+                var btn = createTabButton(tabDivs[x].getAttribute('data-tabname'));
+                node.insertBefore(btn,firstChild);
+                createTabButtonEventListeners(btn.id);
+            }
+            setBeginStage();
+        }
+
+        asTabs(document.querySelector("#wrapper"));
+    </script>
+</body>
+</html>
