@@ -27,16 +27,22 @@
                 trailDiv.className = "trail";
                 trailDiv.style.left = (event.pageX - 3 )+"px";
                 trailDiv.style.top  = (event.pageY - 3 )+"px";
-                trailDiv.id = "mouseTrailID"+mouseTrailCounter;
+                var divId = "mouseTrailID"+mouseTrailCounter;
+                trailDiv.id = divId;
                 document.body.appendChild(trailDiv);
                 setTimeout(function(){
                     mouseTrailGap = false;
                 },25);
-                setTimeout(function(mouseTrailCounter){
-                    var nodeToRemove = document.getElementById(mouseTrailCounter)
-                    document.body.removeChild(nodeToRemove);
-                },25*20);
+                setTimeout(function(divId){
+                    //console.log(divId);
+                    var nodeToRemove = document.getElementById(divId);
+                    //console.log(nodeToRemove);
+                    nodeToRemove.parentNode.removeChild(nodeToRemove);
+                },25*30,divId);
                 mouseTrailCounter++;
+                if (mouseTrailCounter >= 1000){
+                    mouseTrailCounter = 0;
+                }
             }
         });
         // Your code here.
