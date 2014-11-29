@@ -22,17 +22,25 @@
             for(var x=0;x<tabs.length;x++){
                 tabs[x].style.display = "none";
             }
+            var tabBtns = document.querySelectorAll("#wrapper > button");
+            for(var y=0; y< tabBtns.length; y++){
+                tabBtns[y].style.color = 'grey';
+            }
+
         }
         function setBeginStage(){
             clearAllTabs();
             var tabDivs = document.querySelectorAll('div[data-tabname]');
             tabDivs[0].style.display = "block";
+            var tabBtns = document.querySelectorAll("#wrapper > button");
+            tabBtns[0].style.color = 'red';
         }
         function createTabButtonEventListeners(btnId){
             var tabBtn = document.querySelector("#"+btnId);
             tabBtn.addEventListener("click",function(event){
                 clearAllTabs();
                 document.querySelector("div[data-tabname="+event.target.innerHTML+"]").style.display = "block";
+                event.target.style.color = 'red';
             });
         }
         function asTabs(node) {
