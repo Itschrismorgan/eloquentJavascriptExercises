@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Exercise 14.2 - Mouse Trails</title>
+    <style>
+        .trail { /* className for the trail elements */
+            position: absolute;
+            height: 6px; width: 6px;
+            border-radius: 3px;
+            background: teal;
+        }
+        body {
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var mouseTrailGap = false;
+        var mouseTrailCounter = 0;
+
+        addEventListener("mousemove", function(event){
+            if(!mouseTrailGap){
+                mouseTrailGap = true;
+                var trailDiv = document.createElement("div");
+                trailDiv.className = "trail";
+                trailDiv.style.left = (event.pageX - 3 )+"px";
+                trailDiv.style.top  = (event.pageY - 3 )+"px";
+                trailDiv.id = "mouseTrailID"+mouseTrailCounter;
+                document.body.appendChild(trailDiv);
+                setTimeout(function(){
+                    mouseTrailGap = false;
+                },25);
+                setTimeout(function(mouseTrailCounter){
+                    var nodeToRemove = document.getElementById(mouseTrailCounter)
+                    document.body.removeChild(nodeToRemove);
+                },25*20);
+                mouseTrailCounter++;
+            }
+        });
+        // Your code here.
+    </script>
+</body>
+</html>
