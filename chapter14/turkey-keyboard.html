@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Exercise 14.1 - Turkey Keyboard</title>
+</head>
+<body>
+    <input type="text">
+    <script>
+        var field = document.querySelector("input");
+        field.addEventListener("keypress", function(event){
+            //console.log(event.keyCode);
+            if(event.keyCode === 81 || event.keyCode === 87 || event.keyCode === 88 || event.keyCode === 113 || event.keyCode === 119 || event.keyCode === 120){
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
