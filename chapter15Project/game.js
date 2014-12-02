@@ -281,7 +281,16 @@ var arrowCodes = {37: "left", 38: "up", 39: "right"};
 function trackKeys(codes) {
     var pressed = Object.create(null);
     function handler(event) {
-        if (codes.hasOwnProperty(event.keyCode)) {
+        //console.log(event.keyCode+"-"+event.type);
+        if(event.keyCode === 27 && event.type === 'keydown'){
+            if(!pauseGame) {
+                pauseGame = true;
+                console.log("Game paused.");
+            } else {
+                pauseGame = false;
+                console.log("Game unpaused.");
+            }
+        } else if (codes.hasOwnProperty(event.keyCode)) {
             var down = event.type == "keydown";
             pressed[codes[event.keyCode]] = down;
             event.preventDefault();
@@ -309,9 +318,18 @@ function runAnimation(frameFunc) {
 
 var arrows = trackKeys(arrowCodes);
 
+var pauseGame = false;
+
+
 function runLevel(level, Display, andThen) {
     var display = new Display(document.body, level);
-    runAnimation(function(step) {
+
+    function frameFunc(step){
+        if (pauseGame === true){
+            //console.log("pause game");
+            runAnimation(frameFunc);
+            return false;
+        }
         level.animate(step, arrows);
         display.drawFrame(step);
         if (level.isFinished()) {
@@ -320,7 +338,9 @@ function runLevel(level, Display, andThen) {
                 andThen(level.status);
             return false;
         }
-    });
+    }
+
+    runAnimation(frameFunc);
 }
 
 function runGame(plans, Display) {
@@ -328,7 +348,7 @@ function runGame(plans, Display) {
     function startLevel(n) {
         runLevel(new Level(plans[n]), Display, function(status) {
             if (status == "lost") {
-                console.log(this.lives);
+                //console.log(this.lives);
                 this.lives--;
                 if (this.lives < 0) {
                     console.log("You lost! Restarting game ....");
