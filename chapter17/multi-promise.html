@@ -17,10 +17,10 @@
                     success(promiseResults);
                 }
 
-                promises.forEach(function(promise){
+                promises.forEach(function(promise,index){
                     promise.then(
                         function(result){
-                            promiseResults.push(result);
+                            promiseResults[index] = result;
                             promisesLeft--;
                             if(promisesLeft === 0){
                                 success(promiseResults);
@@ -64,6 +64,8 @@
         }, function(error) {
             if (error.message != "boom")
                 console.log("Unexpected failure:", error);
+            else
+                console.log("Boom on purpose:",error);
         });
     </script>
 </body>
