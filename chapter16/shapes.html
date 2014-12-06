@@ -48,13 +48,27 @@
             context.stroke();
         }
 
+        function swirl(centerX,centerY,radius, numSwirls, context){
+            var degreesAround = numSwirls * 2 * Math.PI;
+            var degStep = degreesAround/100;
+            var swirlFactor = radius/100;
 
+            context.beginPath();
+            context.moveTo(centerX,centerY);
+            var moveOut = 0;
+            for(var x = 0; x < degreesAround; x+=degStep){
+                context.lineTo(centerX+Math.sin(x)*moveOut,centerY+Math.cos(x)*moveOut);
+                moveOut += swirlFactor;
+            }
+            context.stroke();
+        }
 
         var canvas = document.querySelector("canvas");
         var context = canvas.getContext("2d");
         trapazoid(10,20,50,70,30,context);
         rotatedSquare(100,20,40,40,0.25,context);
         zigZag(180,1,70,5,15,context);
+        swirl(325,55,50,7,context);
     </script>
 </body>
 </html>
