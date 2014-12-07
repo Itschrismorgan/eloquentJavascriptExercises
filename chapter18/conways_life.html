@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Exercise 18.3 - Conway's Game of Life</title>
+    <link href="game.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div id="gameBoard">
+
+    </div>
+    <script>
+        function generateBoard(boardWrap, width, height){
+            var table = document.createElement('table');
+            //boardWrap.appendChild(table);
+            for(var y = 0; y < height; y++){
+                var tr = document.createElement('tr');
+                for(var x = 0; x < width; x++){
+                    var td = document.createElement('td');
+                    td.id = x+","+y;
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+            boardWrap.appendChild(table);
+        }
+
+        function populateGame(width,height,liveCellRate){
+            for(var y = 0; y < height; y++){
+                for(var x = 0; x < width; x++){
+                    var cell = document.getElementById(x+","+y);
+                    if (Math.random() <= liveCellRate){
+                        cell.classList.add('alive');
+                    }
+                }
+            }
+        }
+
+        generateBoard(document.getElementById('gameBoard'),50,50);
+        populateGame(50,50,0.30);
+    </script>
+</body>
+</html>

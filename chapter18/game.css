@@ -1,0 +1,11 @@
+#gameBoard td {
+    border: 1px solid black;
+    width: 10px;
+}
+#gameBoard tr {
+    height: 10px;
+}
+
+.alive {
+    background-color: black;
+}
