@@ -6,7 +6,7 @@
     <link href="game.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <button id="growOld">Next Generation</button>
+    <button id="growOld">Next Generation</button><button id="toggleAutoRun">Toggle Auto Run</button>
     <div id="gameBoard">
 
     </div>
@@ -102,6 +102,13 @@
 
         }
 
+        function autoTurn(){
+            takeTurn(width, height);
+
+            running = setTimeout('autoTurn()',500);
+        }
+
+
         function takeTurn(width, height){
             var cellStatus = new Array(height);
             for (var i = 0; i < height; i++) {
@@ -146,8 +153,24 @@
             }
         });
 
-        generateBoard(document.getElementById('gameBoard'),50,50);
-        populateGame(50,50,0.30);
+        document.getElementById('toggleAutoRun').addEventListener('click',function(){
+            if (autoRun){
+                autoRun = false;
+                clearTimeout(running);
+            } else {
+                autoRun = true;
+                autoTurn();
+            };
+        });
+
+        var width = 50;
+        var height = 50;
+        var autoRun = false;
+        var running;
+
+        generateBoard(document.getElementById('gameBoard'),width,height);
+        populateGame(width,height,0.30);
+        //autoTurn();
     </script>
 </body>
 </html>
