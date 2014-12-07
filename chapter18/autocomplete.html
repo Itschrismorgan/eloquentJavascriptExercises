@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Exercise 18.2 - Workbench</title>
+    <script src="promise.js"></script>
+</head>
+<body>
+    <input type="text" id="field">
+    <div id="suggestions" style="cursor: pointer"></div>
+
+    <script>
+        // Builds up an array with global variable names, like
+        // 'alert', 'document', and 'scrollTo'
+        var terms = [];
+        for (var name in window)
+            terms.push(name);
+
+        //console.log(terms);
+
+        // Your code here.
+        function addAutoComplete(node, data, sugWrapper){
+            node.addEventListener('input',function(event){
+                var suggestions = [];
+                //console.log(event.target.value);
+                if(event.target.value.length > 0) {
+                    for (var x = 0; x < data.length; x++) {
+                        if (terms[x].indexOf(event.target.value) === 0) {
+                            suggestions.push(data[x]);
+                        }
+                    }
+                    while (sugWrapper.firstChild) {
+                        sugWrapper.removeChild(sugWrapper.firstChild);
+                    }
+                    //console.log(suggestions);
+                    for (var sug in suggestions) {
+                        console.log(sug);
+                        var div = document.createElement('div');
+                        div.innerHTML = suggestions[sug];
+                        sugWrapper.appendChild(div);
+                    }
+                }
+            });
+        }
+
+        addAutoComplete(document.getElementById('field'),terms,document.getElementById('suggestions'));
+    </script>
+</body>
+</html>
