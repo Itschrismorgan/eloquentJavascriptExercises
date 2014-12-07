@@ -6,6 +6,7 @@
     <link href="game.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <button id="growOld">Next Generation</button>
     <div id="gameBoard">
 
     </div>
@@ -36,8 +37,108 @@
             }
         }
 
+        function cssClassExist(node, className){
+            //console.log(node);
+            var classArray = node.classList;
+            for(var index in classArray){
+                if (classArray[index] === className){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function cellAlive(x,y){
+            //console.log("cellAlive "+x+":"+y);
+            var node = document.getElementById(x+","+y);
+            if (node)
+                return cssClassExist(node,'alive');
+            else
+                return false;
+        }
+
+        function checkAround(x,y){
+            var aliveCount = 0;
+            //console.log("checkAround "+x+":"+y);
+            if(cellAlive(x,y-1))    //top
+                aliveCount++;
+            if(cellAlive(x+1,y-1))  //top right
+                aliveCount++;
+            if(cellAlive(x+1,y))    // right
+                aliveCount++;
+            if(cellAlive(x+1,y+1))  //right bottom
+                aliveCount++;
+            if(cellAlive(x,y+1))    //bottom
+                aliveCount++;
+            if(cellAlive(x-1,y+1))  //left bottom
+                aliveCount++;
+            if(cellAlive(x-1,y))    //left
+                aliveCount++;
+            if(cellAlive(x-1,y-1))  //left top
+                aliveCount++;
+
+            return aliveCount;
+        }
+
+        function checkCell(cell){
+            var location = cell.id;
+            var locX = parseInt(location.split(',')[0]);
+            var locY = parseInt(location.split(',')[1]);
+            //console.log(locX+":"+locY);
+
+            var neighborsAlive = checkAround(locX,locY);
+
+            if(cellAlive(locX,locY)){
+                if(neighborsAlive === 2 || neighborsAlive === 3)
+                    return true;
+                else
+                    return false;
+            } else {
+                if(neighborsAlive === 3)
+                    return true;
+                else
+                    return false;
+            }
+
+        }
+
+        function takeTurn(width, height){
+            var cellStatus = new Array(height);
+            for (var i = 0; i < height; i++) {
+                cellStatus[i] = new Array(width);
+            }
+
+            //get life status for next turn
+            for(var y = 0; y < height; y++){
+                for(var x = 0; x < width; x++){
+                    cellStatus[y][x] = checkCell(document.getElementById(x+","+y));
+                }
+            }
+
+            //apply life status
+            //console.log(cellStatus);
+            for(var y = 0; y < height; y++){
+                for(var x = 0; x < width; x++){
+                    if (cellStatus[y][x]){
+                        //cell should be alive
+                        if (!cellAlive(x,y))
+                            document.getElementById(x+","+y).classList.add('alive');
+                    } else {
+                        //cell should be dead
+                        if(cellAlive(x,y))
+                            document.getElementById(x+","+y).classList.remove('alive');
+                    }
+                }
+            }
+        }
+
+        document.getElementById('growOld').addEventListener('click',function(event){
+            takeTurn(50,50);
+        });
+
         generateBoard(document.getElementById('gameBoard'),50,50);
         populateGame(50,50,0.30);
+        //takeTurn(50,50);
     </script>
 </body>
 </html>
