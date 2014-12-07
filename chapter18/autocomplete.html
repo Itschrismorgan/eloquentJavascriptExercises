@@ -18,7 +18,7 @@
             uppercaseTerms.push(name.toUpperCase());
         }
 
-        function addAutoComplete(node, data, sugWrapper){
+        function addAutoComplete(node, data, uppercaseTerms,sugWrapper){
             function clearChildren(node){
                 while (node.firstChild) {
                     node.removeChild(node.firstChild);
@@ -53,7 +53,7 @@
             });
         }
 
-        addAutoComplete(document.getElementById('field'),terms,document.getElementById('suggestions'));
+        addAutoComplete(document.getElementById('field'),terms,uppercaseTerms,document.getElementById('suggestions'));
     </script>
 </body>
 </html>
