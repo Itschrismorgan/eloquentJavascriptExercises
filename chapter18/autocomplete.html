@@ -17,19 +17,18 @@
             terms.push(name);
             uppercaseTerms.push(name.toUpperCase());
         }
-        //console.log(uppercaseTerms);
 
-        function clearChildren(node){
-            while (node.firstChild) {
-                node.removeChild(node.firstChild);
-            }
-        }
-
-        // Your code here.
         function addAutoComplete(node, data, sugWrapper){
+            function clearChildren(node){
+                while (node.firstChild) {
+                    node.removeChild(node.firstChild);
+                }
+            }
+
+
             node.addEventListener('input',function(event){
                 var suggestions = [];
-                //console.log(event.target.value.toUpperCase());
+
                 if(event.target.value.length > 0) {
                     for (var x = 0; x < data.length; x++) {
                         if (uppercaseTerms[x].indexOf(event.target.value.toUpperCase()) === 0) {
@@ -37,9 +36,8 @@
                         }
                     }
                     clearChildren(sugWrapper);
-                    //console.log(suggestions);
+
                     for (var sug in suggestions) {
-                        //console.log(sug);
                         var div = document.createElement('div');
                         div.innerHTML = suggestions[sug];
                         sugWrapper.appendChild(div);
@@ -50,7 +48,6 @@
             });
 
             sugWrapper.addEventListener('click',function(event){
-                //console.log("click:"+event.target.innerHTML);
                 node.value = event.target.innerHTML;
                 clearChildren(sugWrapper);
             });
