@@ -19,6 +19,12 @@
         }
         //console.log(uppercaseTerms);
 
+        function clearChildren(node){
+            while (node.firstChild) {
+                node.removeChild(node.firstChild);
+            }
+        }
+
         // Your code here.
         function addAutoComplete(node, data, sugWrapper){
             node.addEventListener('input',function(event){
@@ -30,9 +36,7 @@
                             suggestions.push(data[x]);
                         }
                     }
-                    while (sugWrapper.firstChild) {
-                        sugWrapper.removeChild(sugWrapper.firstChild);
-                    }
+                    clearChildren(sugWrapper);
                     //console.log(suggestions);
                     for (var sug in suggestions) {
                         //console.log(sug);
@@ -41,15 +45,14 @@
                         sugWrapper.appendChild(div);
                     }
                 } else {
-                    while (sugWrapper.firstChild) {
-                        sugWrapper.removeChild(sugWrapper.firstChild);
-                    }
+                    clearChildren(sugWrapper);
                 }
             });
 
             sugWrapper.addEventListener('click',function(event){
                 //console.log("click:"+event.target.innerHTML);
                 node.value = event.target.innerHTML;
+                clearChildren(sugWrapper);
             });
         }
 
