@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Exercise 18.1 - Workbench</title>
+</head>
+<body>
+    <div>
+        <textarea id="code" style="width: 600px; height: 300px">
+
+        </textarea>
+        <button id="executeCode">Execute Code</button>
+        <div id="output">
+
+        </div>
+    </div>
+    <script>
+        var btn = document.getElementById("executeCode");
+        btn.addEventListener("click",function(event){
+            var codeTxt = document.getElementById("code");
+            var jsProg = codeTxt.value;
+            console.log(jsProg);
+            var output = new Function(jsProg)();
+            console.log(output);
+            var out = document.getElementById("output");
+            out.innerHTML = output;
+        });
+    </script>
+</body>
+</html>
