@@ -132,13 +132,22 @@
             }
         }
 
-        document.getElementById('growOld').addEventListener('click',function(event){
+        document.getElementById('growOld').addEventListener('click',function(){
             takeTurn(50,50);
+        });
+
+        document.getElementById('gameBoard').addEventListener('click',function(event){
+            if(event.target.tagName === 'TD'){
+                if(cssClassExist(event.target,'alive')){
+                    event.target.classList.remove('alive');
+                } else{
+                    event.target.classList.add('alive');
+                }
+            }
         });
 
         generateBoard(document.getElementById('gameBoard'),50,50);
         populateGame(50,50,0.30);
-        //takeTurn(50,50);
     </script>
 </body>
 </html>
